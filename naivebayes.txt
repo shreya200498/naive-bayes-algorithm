@@ -1,0 +1,399 @@
+#include<stdio.h>
+#include<stdlib.h>
+int main()
+{
+    char income[20];
+    char age[20];
+    char rent[20];
+    float income_count[20][20],age_count[20][20];
+    float income_prob[20][20],age_prob[20][20],o_cnt=0,r_cnt=0;//ini 0
+    char t_in,t_age;
+    int x,y;
+    int n,i,j,again;
+    char names[4][10]={"low","medium","high","v.high"};
+    char names2[3][10]={"young","medium","old"};
+
+    for(i=0;i<4;i++)
+    {
+        for(j=0;j<2;j++)
+        {
+            income_count[i][j]=0;
+            income_prob[i][j]=0;
+            age_count[i][j]=0;
+            age_prob[i][j]=0;
+        }
+    }
+    printf("Enter the number of entries: ");
+    scanf("%d",&n);
+    printf("Enter the income(l,m,h,v),age(y,m,o) and house ownership(o,r) for each item in order\n");
+    for(i=0;i<n;i++)
+    {
+        printf("Details of item %d :\n",(i+1));
+        printf("Income: ");
+        scanf(" %c", &income[i]);
+        printf("Age: ");
+        scanf(" %c", &age[i]);
+        printf("House ownership: ");
+        scanf(" %c", &rent[i]);
+    }
+
+    for(i=0;i<n;i++)
+    {
+        if(rent[i]=='o')
+        {
+            o_cnt++;
+        }
+    }
+    r_cnt=n-o_cnt;
+    printf("\nThe information is:\n");
+    printf("Item no.  |  Income  |  Age  | Own house/Rent\n");
+    for(i=0;i<n;i++)
+    {
+        printf("%d\t%c\t%c\t%c\n",(i+1),income[i],age[i],rent[i]);
+    }
+    printf("\nPeople who own a house = %f\n",o_cnt);
+    printf("People who live n rent = %f\n",r_cnt);
+    do{
+        printf("Enter the income(l,m,h,v) : ");
+        scanf(" %c",&t_in);
+        printf("Enter the age(y,m,o) : ");
+        scanf(" %c",&t_age);
+        for(i=0;i<n;i++)
+        {
+            if(income[i]=='l' && rent[i]=='o')
+            {
+                income_count[0][0]++;
+            }
+            else if(income[i]=='l' && rent[i]=='r')
+            {
+                income_count[0][1]++;
+            }
+            else if(income[i]=='m' && rent[i]=='o')
+            {
+                income_count[1][0]++;
+            }
+            else if(income[i]=='m' && rent[i]=='r')
+            {
+                income_count[1][1]++;
+            }
+            else if(income[i]=='h' && rent[i]=='o')
+            {
+                income_count[2][0]++;
+            }
+            else if(income[i]=='h' && rent[i]=='r')
+            {
+                income_count[2][1]++;
+            }
+            else if(income[i]=='v' && rent[i]=='o')
+            {
+                income_count[3][0]++;
+            }
+            else if(income[i]=='v' && rent[i]=='r')
+            {
+                income_count[3][1]++;
+            }
+
+            if(age[i]=='y' && rent[i]=='o')
+            {
+                age_count[0][0]++;
+            }
+            else if(age[i]=='y' && rent[i]=='r')
+            {
+                age_count[0][1]++;
+            }
+            else if(age[i]=='m' && rent[i]=='o')
+            {
+                age_count[1][0]++;
+            }
+            else if(age[i]=='m' && rent[i]=='r')
+            {
+                age_count[1][1]++;
+            }
+            else if(age[i]=='o' && rent[i]=='o')
+            {
+                age_count[2][0]++;
+            }
+            else if(age[i]=='o' && rent[i]=='r')
+            {
+                age_count[2][1]++;
+            }
+        }
+        income_prob[0][0]=income_count[0][0] / o_cnt;
+        income_prob[1][0]=income_count[1][0] / o_cnt;
+        income_prob[2][0]=income_count[2][0] / o_cnt;
+        income_prob[3][0]=income_count[3][0] / o_cnt;
+        income_prob[0][1]=income_count[0][1] / r_cnt;
+        income_prob[1][1]=income_count[1][1] / r_cnt;
+        income_prob[2][1]=income_count[2][1] / r_cnt;
+        income_prob[3][1]=income_count[3][1] / r_cnt;
+
+        age_prob[0][0]=age_count[0][0] / o_cnt;
+        age_prob[1][0]=age_count[1][0] / o_cnt;
+        age_prob[2][0]=age_count[2][0] / o_cnt;
+        age_prob[0][1]=age_count[0][1] / r_cnt;
+        age_prob[1][1]=age_count[1][1] / r_cnt;
+        age_prob[2][1]=age_count[2][1] / r_cnt;
+
+        printf("\nt(income=%c ,age=%c) :\n\n",t_in,t_age);
+        //----------------------------------------------------------------------
+        printf("\t\t\tCount\tProbability\n");
+        printf("Attribute Value Yes  No  Yes  No\n");
+        for(i=0;i<4;i++)
+        {
+            printf("Income  %s  ",names[i]);
+            for(j=0;j<2;j++)
+            {
+                printf("%f\t",income_count[i][j]);
+            }
+            for(j=0;j<2;j++)
+            {
+                printf("%f\t",income_prob[i][j]);
+            }
+            printf("\n");
+        }
+        for(i=0;i<3;i++)
+        {
+            printf("Age  %s  ",names2[i]);
+            for(j=0;j<2;j++)
+            {
+                printf("%f\t",age_count[i][j]);
+            }
+            for(j=0;j<2;j++)
+            {
+                printf("%f\t",age_prob[i][j]);
+            }
+            printf("\n");
+        }
+        //----------------------------------------------------------------
+
+        if(t_in=='l')
+        {
+            x=0;
+        }
+        else if(t_in=='m')
+        {
+            x=1;
+        }
+        else if(t_in=='h')
+        {
+            x=2;
+        }
+        else if(t_in=='v')
+        {
+            x=3;
+        }
+
+        if(t_age=='y')
+        {
+            y=0;
+        }
+        else if(t_age=='m')
+        {
+            y=1;
+        }
+        else if(t_age=='o')
+        {
+            y=2;
+        }
+
+        printf("\nP(owns) = %f\n",(o_cnt/n));
+        printf("P(rented) = %f\n",(r_cnt/n));
+        printf("P(t/owns) = %f\n",(income_prob[x][0]*age_prob[y][0]));
+        printf("P(t/rented) = %f\n",(income_prob[x][1]*age_prob[y][1]));
+        printf("likelihood of owns = %f\n",(income_prob[x][0]*age_prob[y][0]*(o_cnt/n)));
+        printf("likelihood of rented = %f\n",(income_prob[x][1]*age_prob[y][1]*(r_cnt/n)));
+        printf("\nEnter 1 to enter tuple again , 0 to stop :");
+        scanf("%d",&again);
+        printf("\n");
+    }while(again==1);
+
+    return 0;
+}
+/*
+Enter the number of entries: 11
+Enter the income(l,m,h,v),age(y,m,o) and house ownership(o,r) for each item in order
+Details of item 1 :
+Income: v
+Age: y
+House ownership: o
+Details of item 2 :
+Income: h
+Age: m
+House ownership: o
+Details of item 3 :
+Income: l
+Age: y
+House ownership: r
+Details of item 4 :
+Income: h
+Age: m
+House ownership: o
+Details of item 5 :
+Income: v
+Age: m
+House ownership: o
+Details of item 6 :
+Income: m
+Age: y
+House ownership: o
+Details of item 7 :
+Income: h
+Age: o
+House ownership: o
+Details of item 8 :
+Income: m
+Age: m
+House ownership: r
+Details of item 9 :
+Income: l
+Age: m
+House ownership: r
+Details of item 10 :
+Income: l
+Age: o
+House ownership: r
+Details of item 11 :
+Income: h
+Age: y
+House ownership: o
+
+The information is:
+Item no.  |  Income  |  Age  | Own house/Rent
+1       v       y       o
+2       h       m       o
+3       l       y       r
+4       h       m       o
+5       v       m       o
+6       m       y       o
+7       h       o       o
+8       m       m       r
+9       l       m       r
+10      l       o       r
+11      h       y       o
+
+People who own a house = 7.000000
+People who live n rent = 4.000000
+Enter the income(l,m,h,v) : m
+Enter the age(y,m,o) : o
+
+t(income=m ,age=o) :
+
+                           Count                       Probability
+Attribute Value   Yes              No             Yes              No
+
+Income  low     0.000000        3.000000        0.000000        0.750000
+Income  medium  1.000000        1.000000        0.142857        0.250000
+Income  high    4.000000        0.000000        0.571429        0.000000
+Income  v.high  2.000000        0.000000        0.285714        0.000000
+
+Age  young      3.000000        1.000000        0.428571        0.250000
+Age  medium     3.000000        2.000000        0.428571        0.500000
+Age  old        1.000000        1.000000        0.142857        0.250000
+
+P(owns) = 0.636364
+P(rented) = 0.363636
+P(t/owns) = 0.020408
+P(t/rented) = 0.062500
+likelihood of owns = 0.012987
+likelihood of rented = 0.022727
+
+Enter 1 to enter tuple again , 0 to stop :0
+
+
+Process returned 0 (0x0)   execution time : 104.677 s
+Press any key to continue.
+*/
+/*
+Enter the number of entries: 11
+Enter the income(l,m,h,v),age(y,m,o) and house ownership(o,r) for each item in order
+Details of item 1 :
+Income: v
+Age: y
+House ownership: o
+Details of item 2 :
+Income: h
+Age: m
+House ownership: o
+Details of item 3 :
+Income: l
+Age: y
+House ownership: r
+Details of item 4 :
+Income: h
+Age: m
+House ownership: o
+Details of item 5 :
+Income: v
+Age: m
+House ownership: o
+Details of item 6 :
+Income: m
+Age: y
+House ownership: o
+Details of item 7 :
+Income: h
+Age: o
+House ownership: o
+Details of item 8 :
+Income: m
+Age: m
+House ownership: r
+Details of item 9 :
+Income: l
+Age: m
+House ownership: r
+Details of item 10 :
+Income: l
+Age: o
+House ownership: r
+Details of item 11 :
+Income: h
+Age: y
+House ownership: o
+
+The information is:
+Item no.  |  Income  |  Age  | Own house/Rent
+1       v       y       o
+2       h       m       o
+3       l       y       r
+4       h       m       o
+5       v       m       o
+6       m       y       o
+7       h       o       o
+8       m       m       r
+9       l       m       r
+10      l       o       r
+11      h       y       o
+
+People who own a house = 7.000000
+People who live n rent = 4.000000
+Enter the income(l,m,h,v) : h
+Enter the age(y,m,o) : m
+
+t(income=h ,age=m) :
+
+                        Count                           Probability
+Attribute Value    Yes             No             Yes               No
+
+Income  low     0.000000        3.000000        0.000000        0.750000
+Income  medium  1.000000        1.000000        0.142857        0.250000
+Income  high    4.000000        0.000000        0.571429        0.000000
+Income  v.high  2.000000        0.000000        0.285714        0.000000
+
+Age  young      3.000000        1.000000        0.428571        0.250000
+Age  medium     3.000000        2.000000        0.428571        0.500000
+Age  old        1.000000        1.000000        0.142857        0.250000
+
+P(owns) = 0.636364
+P(rented) = 0.363636
+P(t/owns) = 0.244898
+P(t/rented) = 0.000000
+likelihood of owns = 0.155844
+likelihood of rented = 0.000000
+
+Enter 1 to enter tuple again , 0 to stop :0
+
+
+Process returned 0 (0x0)   execution time : 164.755 s
+Press any key to continue.
+*/
